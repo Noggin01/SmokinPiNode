@@ -55,22 +55,30 @@ class Monitor {
     constructor (_log: Logger, _socket: Socket) {
         this.socket = _socket
         this.log = _log.child(this.socket.handshake.address)
-        this.intervals.push(this.startDataEmitter())
-        this.intervals.push(this.startHistoryEmitter())
 
         this.log.info('Client connected')
         this.log.debug({ setpoint: state.getSetpoint() }, 'Sending setpoint')
         this.socket.emit('message', { setpoint: state.getSetpoint() })
+
+        this.intervals.push(this.startDataEmitter())
+        this.intervals.push(this.startHistoryEmitter())
+
+        this.socket.on('disconnect', () => {
+            this.log.trace('Clearing timeouts')
+            this.intervals.forEach(timeout => clearTimeout(timeout))
+        })
     }
 
-    private startDataEmitter() { return setInterval(this.dataEmitter, 1000) }
-    private startHistoryEmitter() { return setInterval(this.historyEmitter, 15000)}
+    private startDataEmitter() { return setInterval(() => this.dataEmitter(), 1000) }
+    private startHistoryEmitter() { return setInterval(() => this.historyEmitter(), 15000)}
 
     private dataEmitter() {
-        this.log.debug('dataEmitter')        
+        log.trace({ cabinet: state.getTempData().cabinet.toFixed(2), fire: 450.3 }, `emit to ${this.socket.handshake.address}`)
+        this.socket.emit('message', { cabinet: state.getTempData().cabinet.toFixed(2), fire: 450.3 })
     }
 
     private historyEmitter() {
-        this.log.debug('historyEmitter')
+        this.log.trace({ chartData: state.getHistory() }, `emit to ${this.socket.handshake.address}`)
+        this.socket.emit('message', { chartData: state.getHistory() })
     }
 }
