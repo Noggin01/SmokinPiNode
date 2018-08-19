@@ -73,7 +73,7 @@ class Monitor {
     private startHistoryEmitter() { return setInterval(() => this.historyEmitter(), 15000)}
 
     private dataEmitter() {
-        log.trace({ cabinet: state.getTempData().cabinet.toFixed(2), fire: 450.3 }, `emit to ${this.socket.handshake.address}`)
+        this.log.trace({ cabinet: state.getTempData().cabinet.toFixed(2), fire: 450.3 }, `emit to ${this.socket.handshake.address}`)
         this.socket.emit('message', { cabinet: state.getTempData().cabinet.toFixed(2), fire: 450.3 })
     }
 
