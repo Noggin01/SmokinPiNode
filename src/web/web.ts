@@ -1,8 +1,8 @@
 import express from 'express'
 import socketIo, { Socket } from 'socket.io'
 import * as http from 'http'
-import * as state from './state'
-import { Logger } from './common/logger'
+import * as state from '../state'
+import { Logger } from '../common/logger'
 
 const app = express();  
 const server = http.createServer(app);  

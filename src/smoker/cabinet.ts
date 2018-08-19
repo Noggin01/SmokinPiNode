@@ -1,4 +1,4 @@
-import { Logger } from './common/logger'
+import { Logger } from '../common/logger'
 
 export class Cabinet {
     _temperature: number
@@ -12,7 +12,9 @@ export class Cabinet {
         this.log.info('Cabinet initialized')
     }
 
-    public get temperature(){ return this._temperature }
+    public get temperature (){ return this._temperature }
+
+    public get cabinet (){ return { temperature: this._temperature }}
 
     public simulate( valvePosition: number ) {
         this._temperature += (valvePosition / 10)
