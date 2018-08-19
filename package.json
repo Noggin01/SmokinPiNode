@@ -1,0 +1,49 @@
+{
+  "name": "nodesmokinpi",
+  "version": "0.0.1",
+  "description": "Raspberry Pi Gas Smoker Controller",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "na"
+  },
+  "keywords": [
+    "raspberry",
+    "pi",
+    "rpi",
+    "smoker",
+    "propane",
+    "natural gas",
+    "lpg"
+  ],
+  "author": "Henry McDonald",
+  "license": "MIT",
+  "dependencies": {
+    "@types/bunyan": "^1.8.4",
+    "@types/bunyan-format": "^0.2.0",
+    "@types/express": "^4.16.0",
+    "@types/fs-extra": "^5.0.4",
+    "@types/lodash": "^4.14.116",
+    "@types/node": "^10.0.8",
+    "@types/socket.io": "^1.4.33",
+    "bunyan": "^1.8.12",
+    "bunyan-format": "^0.2.1",
+    "express": "^4.16.3",
+    "fs-extra": "^7.0.0",
+    "jquery": "^3.3.1",
+    "lodash": "^4.17.10",
+    "socket.io": "^2.1.0"
+  },
+  "devDependencies": {
+    "cz-conventional-changelog": "^2.1.0",
+    "cz-emoji": "^1.1.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-emoji"
+    }
+  }
+}

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang='en'>
+
+<head>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://rawgit.com/gionkunz/chartist-js/master/dist/chartist.min.css">
+        
+        <style>
+            #chart {
+                height: 300px;
+                width: 100%;
+            }
+        </style>
+</head>
+
+<body>
+    <h1>Hello World!</h1>
+    
+    <table>
+        <tr><th>Sensor</th><th>Temperature</th></tr>
+        <tr><td>Cabinet</td><td id='cabinetTemp'>?</td></tr>
+    </table>
+
+    <br>    <!-- Break after table -->
+    <div class='slidecontainer'>
+        <input type='range' min='75' max='350' value='75' class='slider' id='targetTempSlider'>
+        <p>Value: <span id='tempSliderValue'></span></p>
+    </div>
+    <div class="ct-chart" id="chart"></div>
+
+    <script type="text/javascript" src="https://rawgit.com/gionkunz/chartist-js/master/dist/chartist.js"></script>
+    
+    <script>
+    </script>
+    <script src='/jquery/dist/jquery.js'></script>
+    <script src='/socket.io/socket.io.js'></script>
+    <script>  
+        var chart = new Chartist.Line('#chart', {
+            labels: [1, 2, 3, 4, 5, 6, 7, 8],
+            series: [
+                [5, 9, 7, 8, 5, 3, 5, 4],
+                [6, 10, 8, 9, 6, 4, 6, 5]
+            ]
+            }, {
+                low: 0,
+                high: 300,
+                onlyInteger: true,
+                showArea: false,
+                showPoint: false
+            });
+        var socket = io.connect('http://127.0.0.1:4200');
+        socket.on('connect', function (msg) {
+            socket.emit('join', 'Hello World from client');
+        });
+
+        socket.on('message', function(msg) {
+            if (msg.cabinet) document.getElementById('cabinetTemp').innerHTML = msg.cabinet.toFixed(2);
+            if (msg.setpoint) {
+                document.getElementById('targetTempSlider').value = msg.setpoint;
+                document.getElementById('tempSliderValue').innerHTML = msg.setpoint;
+            }
+            if (msg.chartData) chart.update(msg.chartData)            
+        });
+    
+        var slider = document.getElementById('targetTempSlider');
+        var output = document.getElementById('tempSliderValue');
+        var transmitTimeout
+        output.innerHTML = slider.value;
+        
+        slider.oninput = function() {
+          output.innerHTML = this.value;
+
+          if (transmitTimeout) {
+              clearTimeout(transmitTimeout)              
+          }
+          transmitTimeout = setTimeout(() => {
+            socket.emit('targetTempMsg', { setpoint: slider.value } )
+          }, 250)
+        }
+    </script>
+</body>
+
+</html>
+
