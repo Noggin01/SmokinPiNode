@@ -1,4 +1,4 @@
-import { Logger } from './common/logger'
+import { Logger } from '../common/logger'
 
 export class Pid {
     kp: number
