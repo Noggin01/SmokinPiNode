@@ -21,3 +21,6 @@ setInterval(() => {
 setInterval(() => {
     state.addHistory(smoker.cabinet.temperature, simulatedTemps)
 }, 15000)
+
+import { Tlc1543 } from './common/tlc1543'
+const tlc1543 = new Tlc1543(0, 0, log)
